@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="theme-color" content="#FF6B35">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Aile Şefi">
+    <meta name="description" content="Aile için akıllı yemek tarifi asistanı">
+    <title>Aile Şefi 👨‍🍳</title>
+    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🍳</text></svg>">
+    <link rel="apple-touch-icon" href="icons/icon-192.png">
+</head>
+<body>
+    <div id="app">
+        <!-- Header -->
+        <header id="app-header">
+            <div class="header-left">
+                <span class="header-icon">👨‍🍳</span>
+                <div class="header-text">
+                    <h1>Aile Şefi</h1>
+                    <span class="header-subtitle" id="statusText">Çevrimiçi</span>
+                </div>
+            </div>
+            <div class="header-right">
+                <button id="resetBtn" class="header-btn" title="Baştan Başla" aria-label="Baştan başla">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path></svg>
+                </button>
+                <button id="settingsBtn" class="header-btn" title="Ayarlar" aria-label="Ayarlar">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+                </button>
+            </div>
+        </header>
+
+        <!-- Chat Messages -->
+        <div id="chat-container">
+            <div id="messages"></div>
+        </div>
+
+        <!-- Quick Reply Buttons -->
+        <div id="quick-replies" class="hidden"></div>
+
+        <!-- Input Area -->
+        <div id="input-area">
+            <div class="input-wrapper">
+                <input type="text" id="userInput" placeholder="Mesajınızı yazın..." autocomplete="off" enterkeyhint="send">
+                <button id="sendBtn" aria-label="Gönder">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"></path></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div id="settingsModal" class="modal hidden">
+        <div class="modal-overlay" id="modalOverlay"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>⚙️ Ayarlar</h2>
+                <button id="closeModal" class="close-btn" aria-label="Kapat">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="apiKeyInput">Gemini API Anahtarı</label>
+                    <div class="api-key-wrapper">
+                        <input type="password" id="apiKeyInput" placeholder="API anahtarınızı girin...">
+                        <button id="toggleKeyVisibility" class="toggle-visibility-btn" aria-label="Göster/Gizle">👁️</button>
+                    </div>
+                    <p class="hint">
+                        Ücretsiz API anahtarı almak için 
+                        <a href="https://aistudio.google.com/apikey" target="_blank" rel="noopener">Google AI Studio</a>
+                        sayfasını ziyaret edin.
+                    </p>
+                </div>
+                <div class="form-group">
+                    <label for="modelSelect">Model</label>
+                    <select id="modelSelect">
+                        <option value="gemini-3.8-flash">Gemini 3.8 Flash (Hızlı, Önerilen)</option>
+                        <option value="gemini-3.8-pro">Gemini 3.8 Pro (Güçlü)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="saveSettings" class="btn btn-primary">💾 Kaydet</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Install Prompt Banner -->
+    <div id="installBanner" class="hidden">
+        <p>📲 Ana ekrana ekleyerek uygulama gibi kullanın!</p>
+        <div class="install-actions">
+            <button id="installBtn" class="btn btn-primary btn-sm">Yükle</button>
+            <button id="dismissInstall" class="btn btn-secondary btn-sm">Sonra</button>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
